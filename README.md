@@ -13,8 +13,11 @@ Test instances are placed in directory *./lab-1/test_instances/*.
 
 ### Input format
 n (number of plants/locations)
+
 *Next n rows*: distances matrix D
+
 *Empty row*
+
 *Next n rows*: flows matrix F
 
 ### Output file
