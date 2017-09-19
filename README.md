@@ -25,3 +25,8 @@ n (number of plants/locations)
 *instancename*.sol (e.g. **Tai20a.sol**)
 #### Format
 *a1 a2 a3 ... an* - solution (permutation means plant a1 is opened in location 1 and so on, separator - spacebar)
+
+### Solutions for test data
+#### tai12a
+  12  224416
+   8 1 6 2 11 10 3 5 9 7 12 4
