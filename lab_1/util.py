@@ -8,14 +8,16 @@ TEST_INSTANCES_DIR = 'test_instances'
 # Helper function to parse one matrix from file
 def read_n_lines_as_matrix(f, n):
     res = ''
+    all_indexes = []
     for i in range(n):
         row = f.readline().lstrip()
         res = res + row
+        all_indexes.append(i)
     res = '; '.join(res.split("\n"))  # Replace newline character with semicolon
     res = re.sub(' +', ' ', res)  # Replace multiple spaces with the single one
     res = re.sub('; $', '', res)  # Replace semicolon from the end of string
     res = np.matrix(res, dtype=np.float)
-    res[res == 0] = np.nan
+    res[tuple(all_indexes), tuple(all_indexes)] = np.nan # Replace diagonal zeros with NaN
     return res
 
 
