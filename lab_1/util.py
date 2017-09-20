@@ -1,43 +1,40 @@
 import numpy as np
+import os
+import re
 
+TEST_INSTANCES_DIR = 'test_instances'
 
+# Helper function to parse one matrix from file
+def read_n_lines_as_matrix(f, n):
+    res = ''
+    for i in range(n):
+        row = f.readline().lstrip()
+        res = res + row
+    res = '; '.join(res.split("\n"))  # Replace newline character with semicolon
+    res = re.sub(' +', ' ', res)  # Replace multiple spaces with the single one
+    res = re.sub('; $', '', res)  # Replace semicolon from the end of string
+    res = np.matrix(res, dtype=np.float)
+    res[res == 0] = np.nan
+    return res
+
+# Read file and return number of facilities and locations, flows and distance matrices
+def read_from_file(filename):
+    with open(os.path.join(TEST_INSTANCES_DIR, filename)) as f:
+        n = int(f.readline().strip())
+        dm = read_n_lines_as_matrix(f, n)
+        f.readline()
+        fm = read_n_lines_as_matrix(f, n)
+        return n, dm, fm
+
+# Return objective function value based on provided solution, n, distance and flows matrices
 def calc_obj_fun_value(solution, n, d, f):
     res = 0.0
     for i in range(n - 1):
         for j in range(i + 1, n):
-            print('Place #{} facility in location #{}'.format(i, solution[i]))
             res = res + f[i, j] * d[solution[i], solution[j]]
     return res
 
-def argextr(m, filter):
-    for i in filter:
-        print()
 
-def find_initial_solution(n, d, f):
-    rest_facilities = set()
-    rest_locations = set()
-    solution = []
-    for i in range(n):
-        rest_facilities.add(i)
-        rest_locations.add(i)
-        solution.append(np.nan)
-    while len(rest_facilities) > 0:
-        a = rest_facilities.pop()
-        if len(rest_locations) == 1 and len(rest_facilities) == 0:
-            solution[a] = rest_locations.pop()
-            break
-        # Find maximum flow facility
-        wts = f[a, tuple(rest_facilities)]
-        print('Facility #{}, flows to search: {}'.format(a, wts))
-        b = np.nanargmax(wts)
-        # Locate them in nearest locations
-        rest_loc_m = d[:, tuple(rest_locations)][tuple(rest_locations), :]
-        nearest_locations = np.where(rest_loc_m == np.nanmin(rest_loc_m))[0]
-        solution[a] = nearest_locations[0]
-        solution[b] = nearest_locations[1]
-        # Remove processed facilities and locations from search
-        rest_facilities.remove(b)
-        rest_locations.remove(nearest_locations[0])
-        rest_locations.remove(nearest_locations[1])
-    return solution
-
+# Build random initial solution
+def build_initial_solution(n):
+    return np.random.permutation(n)
