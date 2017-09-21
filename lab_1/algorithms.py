@@ -9,7 +9,7 @@ with tuned parameters and analytical comparisons", page 3
 '''
 def two_opt(n, d, f):
     # Step 1
-    prev_best_solution = util.build_initial_solution(n)
+    prev_best_solution = util.build_random_solution(n)
     while True:
         # Step 2
         current_best_solution = prev_best_solution.copy()

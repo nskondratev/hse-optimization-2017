@@ -41,5 +41,5 @@ def calc_obj_fun_value(solution, n, d, f):
 
 
 # Build random initial solution
-def build_initial_solution(n):
+def build_random_solution(n):
     return np.random.permutation(n)
