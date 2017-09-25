@@ -33,7 +33,7 @@ def local_search(initial_solution, n, d, f):
     return prev_best_solution
 
 
-def iterated_local_search(n, d, f):
+def repeated_local_search(n, d, f):
     MAX_UNCHANGED_ITERATIONS = n**3
     initial_solution = util.build_random_solution(n)
     best_solution = local_search(initial_solution, n, d, f)
