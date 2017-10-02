@@ -13,7 +13,7 @@ def local_search(initial_solution, n, d, f):
     # Step 1
     best_solution = initial_solution.copy()
     best_obj = util.calc_obj_fun_value(initial_solution, n, d, f)
-    # print('Initial LS soluition: {}, Initial LS objective value: {}'.format(best_solution, best_obj))
+    # print('Initial LS solution: {}, Initial LS objective value: {}'.format(best_solution, best_obj))
     while True:
         # Step 2
         change = False  # indicator that checks if objective value decreases
@@ -42,15 +42,15 @@ def local_search(initial_solution, n, d, f):
         # Step 3
         if not change:
             break
-            # print('Current best LS soluition: {}, Current best LS objective value: {}'.format(best_solution,
+            # print('Current best LS solution: {}, Current best LS objective value: {}'.format(best_solution,
     return best_solution, best_obj
 
 
-def local_search_penalyzed_obj(initial_solution, n, d, f, alpha, penalty_vec):
+def local_search_penalized_obj(initial_solution, n, d, f, alpha, penalty_vec):
     # Step 1
     best_solution = initial_solution.copy()
-    best_obj = util.penalysed_objective(initial_solution, n, d, f, alpha, penalty_vec)
-    # print('Initial LS soluition: {}, Initial LS objective value: {}'.format(best_solution, best_obj))
+    best_obj = util.penalized_objective(initial_solution, n, d, f, alpha, penalty_vec)
+    # print('Initial LS solution: {}, Initial LS objective value: {}'.format(best_solution, best_obj))
     while True:
         # Step 2
         change = False  # indicator that checks if objective value decreases
@@ -64,7 +64,7 @@ def local_search_penalyzed_obj(initial_solution, n, d, f, alpha, penalty_vec):
             temp = new_solution[i]
             new_solution[i] = new_solution[j]
             new_solution[j] = temp
-            new_obj = util.penalysed_objective(new_solution, n, d, f, alpha, penalty_vec)
+            new_obj = util.penalized_objective(new_solution, n, d, f, alpha, penalty_vec)
             # Compare with current best result
             if new_obj < best_obj:
                 change = True
@@ -79,12 +79,12 @@ def local_search_penalyzed_obj(initial_solution, n, d, f, alpha, penalty_vec):
         # Step 3
         if not change:
             break
-            # print('Current best LS soluition: {}, Current best LS objective value: {}'.format(best_solution,
+            # print('Current best LS solution: {}, Current best LS objective value: {}'.format(best_solution,
     return best_solution, best_obj
 
 
 def repeated_local_search(initial_solution, n, d, f):
-    MAX_UNCHANGED_ITERATIONS = n
+    MAX_UNCHANGED_ITERATIONS = util.get_max_unchanged_iterations_number(n)
     best_solution, best_obj = local_search(initial_solution, n, d, f)
     # print('Initial objective function value: {}'.format(best_obj))
     no_change = 0
@@ -104,13 +104,13 @@ def repeated_local_search(initial_solution, n, d, f):
 
 
 def iterated_local_search(initial_solution, k, n, d, f):
-    MAX_UNCHANGED_ITERATIONS = n
+    MAX_UNCHANGED_ITERATIONS = util.get_max_unchanged_iterations_number(n)
     best_solution, best_obj = local_search(initial_solution, n, d, f)
     ls_solution = best_solution.copy()  # found by LS
     # print('Initial objective function value: {}'.format(best_obj))
     no_change = 0
     while True:
-        new_initial_solution = util.perturbate_solution(k, ls_solution)
+        new_initial_solution = util.perturbation(k, ls_solution)
         current_solution, current_obj = local_search(new_initial_solution, n, d, f)
         if current_obj < best_obj:
             best_obj = current_obj
@@ -125,7 +125,7 @@ def iterated_local_search(initial_solution, k, n, d, f):
 
 
 def guided_local_search(initial_solution, alpha, n, d, f):
-    MAX_UNCHANGED_ITERATIONS = n
+    MAX_UNCHANGED_ITERATIONS = util.get_max_unchanged_iterations_number(n)
     c = np.zeros((n, n, n, n))
     p = np.zeros((n, n, n, n))
     utility = np.zeros((n, n, n, n))
@@ -134,7 +134,7 @@ def guided_local_search(initial_solution, alpha, n, d, f):
     best_obj = util.calc_obj_fun_value(initial_solution, n, d, f)
     while True:
         new_initial_solution = best_solution.copy()
-        current_solution, penalyzed_obj = local_search_penalyzed_obj(new_initial_solution, n, d, f, alpha, p)
+        current_solution, penalyzed_obj = local_search_penalized_obj(new_initial_solution, n, d, f, alpha, p)
         current_obj = util.calc_obj_fun_value(current_solution, n, d, f)
         max = 0
         # cost of feature (i,j), i and j are facilities, n(n-1)/2 features
