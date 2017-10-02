@@ -73,4 +73,4 @@ def perturbation(k0, solution):
 
 
 def get_max_unchanged_iterations_number(n):
-    return 3 * n
+    return 5 * n
