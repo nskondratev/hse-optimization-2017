@@ -3,8 +3,7 @@ import os
 import re
 import random
 from random import shuffle
-
-TEST_INSTANCES_DIR = 'test_instances'
+from lab_1.constants import TEST_INSTANCES_DIR, SOLUTIONS_DIR
 
 
 # Helper function to parse one matrix from file
@@ -31,6 +30,16 @@ def read_from_file(filename):
         f.readline()
         fm = read_n_lines_as_matrix(f, n)
         return n, dm, fm
+
+
+# Write solution to file
+def write_solution_to_file(filename, solution, dir = SOLUTIONS_DIR):
+    # Ensure that directory exists
+    if not os.path.exists(dir):
+        os.mkdir(dir)
+
+    with open(os.path.join(dir, '{}.sol'.format(filename)), 'w') as f:
+        f.write(solution.join(' '))
 
 
 # Return objective function value based on provided solution, n, distance and flows matrices
