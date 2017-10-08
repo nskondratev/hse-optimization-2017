@@ -13,12 +13,10 @@ def local_search(initial_solution, n, d, f):
     # Step 1
     best_solution = initial_solution.copy()
     best_obj = util.calc_obj_fun_value(initial_solution, n, d, f)
-    # print('Initial LS solution: {}, Initial LS objective value: {}'.format(best_solution, best_obj))
     while True:
         # Step 2
         change = False  # indicator that checks if objective value decreases
         current_solution = best_solution.copy()
-        # current_obj = util.calc_obj_fun_value(current_solution, n, d, f)
         i = 0
         j = 1
         while not change and i < n - 1:
@@ -42,7 +40,6 @@ def local_search(initial_solution, n, d, f):
         # Step 3
         if not change:
             break
-            # print('Current best LS solution: {}, Current best LS objective value: {}'.format(best_solution,
     return best_solution, best_obj
 
 
@@ -50,12 +47,10 @@ def local_search_penalized_obj(initial_solution, n, d, f, alpha, penalty_vec):
     # Step 1
     best_solution = initial_solution.copy()
     best_obj = util.penalized_objective(initial_solution, n, d, f, alpha, penalty_vec)
-    # print('Initial LS solution: {}, Initial LS objective value: {}'.format(best_solution, best_obj))
     while True:
         # Step 2
         change = False  # indicator that checks if objective value decreases
         current_solution = best_solution.copy()
-        # current_obj = util.calc_obj_fun_value(current_solution, n, d, f)
         i = 0
         j = 1
         while not change and i < n - 1:
@@ -79,14 +74,12 @@ def local_search_penalized_obj(initial_solution, n, d, f, alpha, penalty_vec):
         # Step 3
         if not change:
             break
-            # print('Current best LS solution: {}, Current best LS objective value: {}'.format(best_solution,
     return best_solution, best_obj
 
 
 def repeated_local_search(initial_solution, n, d, f):
     MAX_UNCHANGED_ITERATIONS = util.get_max_unchanged_iterations_number(n)
     best_solution, best_obj = local_search(initial_solution, n, d, f)
-    # print('Initial objective function value: {}'.format(best_obj))
     no_change = 0
     while True:
         new_initial_solution = util.build_random_solution(n)
@@ -94,7 +87,6 @@ def repeated_local_search(initial_solution, n, d, f):
         if current_obj < best_obj:
             best_obj = current_obj
             best_solution = current_solution.copy()
-            # print('Improved best objective function value: {}'.format(best_obj))
             no_change = 0
         else:
             no_change = no_change + 1
@@ -107,7 +99,6 @@ def iterated_local_search(initial_solution, k, n, d, f):
     MAX_UNCHANGED_ITERATIONS = util.get_max_unchanged_iterations_number(n)
     best_solution, best_obj = local_search(initial_solution, n, d, f)
     ls_solution = best_solution.copy()  # found by LS
-    # print('Initial objective function value: {}'.format(best_obj))
     no_change = 0
     while True:
         new_initial_solution = util.perturbation(k, ls_solution)
@@ -115,7 +106,6 @@ def iterated_local_search(initial_solution, k, n, d, f):
         if current_obj < best_obj:
             best_obj = current_obj
             best_solution = current_solution.copy()
-            # print('Improved best objective function value: {}'.format(best_obj))
             no_change = 0
         else:
             no_change = no_change + 1
@@ -154,7 +144,6 @@ def guided_local_search(initial_solution, alpha, n, d, f):
         if current_obj < best_obj:
             best_obj = current_obj
             best_solution = current_solution.copy()
-            # print('Improved best objective function value: {}'.format(best_obj))
             no_change = 0
         else:
             no_change = no_change + 1

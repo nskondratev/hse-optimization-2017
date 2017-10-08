@@ -5,6 +5,7 @@ import lab_1.util as util
 import lab_1.algorithms as alg
 from lab_1.constants import TEST_INSTANCES_DIR, SOLUTIONS_DIR
 
+
 def apply_algorithms_to_instance(filename):
     print('==== Process file: {} ===='.format(filename))
     n, d, f = util.read_from_file(filename)
@@ -33,6 +34,7 @@ def apply_algorithms_to_instance(filename):
     util.write_solution_to_file(filename, sol, dir='gls_{}'.format(SOLUTIONS_DIR))
     print('**** Finish working with file: {} ****'.format(filename))
 
+
 if __name__ == '__main__':
     # Run algorithms on all test instances
     files = os.listdir(TEST_INSTANCES_DIR)
@@ -40,4 +42,3 @@ if __name__ == '__main__':
     pool.map(apply_algorithms_to_instance, files)
     pool.close()
     pool.join()
-

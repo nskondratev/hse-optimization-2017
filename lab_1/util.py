@@ -33,15 +33,13 @@ def read_from_file(filename):
 
 
 # Write solution to file
-def write_solution_to_file(filename, solution, dir = SOLUTIONS_DIR):
+def write_solution_to_file(filename, solution, dir=SOLUTIONS_DIR):
     # Ensure that directory exists
     if not os.path.exists(dir):
         os.mkdir(dir)
-
     res = np.array2string(solution, separator=' ').lstrip('[').rstrip(']').strip()
     res = re.sub('\n', ' ', res)
     res = re.sub(' +', ' ', res)
-
     with open(os.path.join(dir, '{}.sol'.format(filename)), 'w') as f:
         f.write(res)
 
