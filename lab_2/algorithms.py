@@ -11,25 +11,21 @@ def swap(a, i, j):
 
 
 # this function changes matrix, does not change clusters -> matrix, perm_row are renewed
-def move_row(matrix, i, j, perm_row):
-    res = matrix.copy()
-    res[i] = res[j]
-    res[j] = matrix[i]
+def swap_rows(matrix, i, j, perm_row):
+    matrix[i], matrix[j] = matrix[j], matrix[i].copy()
     swap(perm_row, i, j)
-    return res
+    return matrix
 
 
 # this function changes matrix, does not change clusters -> matrix, perm_col are renewed
-def move_col(matrix, i, j, perm_col):
-    res = matrix.copy()
-    res[:, i] = res[:, j]
-    res[:, j] = matrix[:, i]
+def swap_cols(matrix, i, j, perm_col):
+    matrix[:, i], matrix[:, j] = matrix[:, j], matrix[:, i].copy()
     swap(perm_col, i, j)
-    return res
+    return matrix
 
 
 # this function changes clusters, does not change matrix -> clusters_row, clusters_col are renewed
-def split_cluster(clusters_row, clusters_col, current_number_of_clusters, number_of_cluster):
+def split_clusters(clusters_row, clusters_col, current_number_of_clusters, number_of_cluster):
     if (current_number_of_clusters >= min(len(clusters_row), len(clusters_col))):
         return -1  # cannot split if all clusters are 1*1
     new_row = clusters_row.copy()
@@ -70,14 +66,16 @@ def union_two_clusters(clusters_row, clusters_col, current_number_of_clusters, n
         if (new_col[i] >= M + 1): new_col[i] -= 1
     return new_row, new_col
 
-
+'''
+Local search
+'''
 # this function changes matrix, does not change clusters -> matrix, perm_row are renewed
 # clusters are constant and used only to find objective function
 def local_search_move_row(matrix, n1, m, p, clusters_row, clusters_col, perm_row):
     curr_obj = util.objective_function(matrix, n1, clusters_row, clusters_col)
     for i in range(m - 1):
         for j in range(i + 1, m):
-            new_matrix = move_row(matrix, i, j, perm_row)
+            new_matrix = swap_rows(matrix, i, j, perm_row)
             new_obj = util.objective_function(new_matrix, n1, clusters_row, clusters_col)
             if (new_obj > curr_obj): return new_matrix, new_obj, clusters_row, clusters_col
     return -1
@@ -89,7 +87,7 @@ def local_search_move_col(matrix, n1, m, p, clusters_row, clusters_col, perm_col
     curr_obj = util.objective_function(matrix, n1, clusters_row, clusters_col)
     for i in range(p - 1):
         for j in range(i + 1, p):
-            new_matrix = move_col(matrix, i, j, perm_col)
+            new_matrix = swap_cols(matrix, i, j, perm_col)
             new_obj = util.objective_function(new_matrix, n1, clusters_row, clusters_col)
             if (new_obj > curr_obj): return new_matrix, new_obj, clusters_row, clusters_col
     return -1
@@ -101,7 +99,7 @@ def local_search_split_cluster(matrix, n1, m, p, clusters_row, clusters_col, cur
     curr_obj = util.objective_function(matrix, n1, clusters_row, clusters_col)
     N = current_number_of_clusters
     for i in range(1, N + 1):
-        res = split_cluster(clusters_row, clusters_col, N, i)
+        res = split_clusters(clusters_row, clusters_col, N, i)
         if (res != -1):
             new_row, new_col = res
             new_obj = util.objective_function(matrix, n1, new_row, new_col)
@@ -117,20 +115,22 @@ def local_search_union_clusters(matrix, n1, m, p, clusters_row, clusters_col, cu
     new_col = clusters_col.copy()
     N = current_number_of_clusters
     for i in range(1, N):
-        res = split_cluster(clusters_row, clusters_col, N, i)
+        res = split_clusters(clusters_row, clusters_col, N, i)
         if (res != -1):
             new_row, new_col = res
             new_obj = util.objective_function(matrix, n1, new_row, new_col)
             if (new_obj > curr_obj): return matrix, new_obj, new_row, new_col
     return -1
 
-
+'''
+Shaking
+'''
 # this function changes matrix, does not change clusters -> matrix, perm_row are renewed
 def shaking_row(matrix, m, p, perm_row):
     a1 = random.randint(0, m - 1)
     a2 = a1
     while (a2 == a1): a2 = random.randint(0, m - 1)
-    return move_row(matrix, a1, a2, perm_row)
+    return swap_rows(matrix, a1, a2, perm_row)
 
 
 # this function changes matrix, does not change clusters -> matrix, perm_col are renewed
@@ -138,7 +138,7 @@ def shaking_col(matrix, m, p, perm_col):
     b1 = random.randint(0, p - 1)
     b2 = b1
     while (b2 == b1): b2 = random.randint(0, p - 1)
-    return move_col(matrix, b1, b2, perm_col)
+    return swap_cols(matrix, b1, b2, perm_col)
 
 
 # this function changes clusters, does not change matrix -> clusters_row, clusters_col are renewed
@@ -147,8 +147,8 @@ def shaking_split(clusters_row, clusters_col, current_number_of_clusters):
     if (current_number_of_clusters == min(len(clusters_row), len(clusters_col))):
         return -1  # no shaking is possible
     while (res == -1):
-        res = split_cluster(clusters_row, clusters_col, current_number_of_clusters,
-                            random.randint(1, current_number_of_clusters))
+        res = split_clusters(clusters_row, clusters_col, current_number_of_clusters,
+                             random.randint(1, current_number_of_clusters))
     return res
 
 
