@@ -1,6 +1,8 @@
 import numpy as np
 import os
 import re
+import random
+from random import shuffle
 
 TEST_INSTANCES_DIR = 'test_instances'
 
@@ -40,6 +42,35 @@ def calc_obj_fun_value(solution, n, d, f):
     return res
 
 
+def penalized_objective(solution, n, d, f, alpha, penalty_vec):
+    res = 0.0
+    for i in range(n - 1):
+        for j in range(i + 1, n):
+            res = res + f[i, j] * d[solution[i], solution[j]] + alpha * penalty_vec[i, j, solution[i], solution[j]]
+    return res
+
+
 # Build random initial solution
 def build_random_solution(n):
     return np.random.permutation(n)
+
+
+# Perturbation, k components
+def perturbation(k0, solution):
+    new_solution = solution.copy()
+    n = len(solution)
+    k = np.minimum(k0, n)
+    part_solution = random.sample(list(new_solution), k)
+    positions = []
+    for i in range(len(new_solution)):
+        for j in range(len(part_solution)):
+            if (new_solution[i] == part_solution[j]):
+                positions.append(i)
+    shuffle(part_solution)
+    for i in range(len(positions)):
+        new_solution[positions[i]] = part_solution[i]
+    return new_solution
+
+
+def get_max_unchanged_iterations_number(n):
+    return 5 * n

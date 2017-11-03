@@ -2,7 +2,7 @@
 ## Lab 1 - Local Search Methods
 ### Task
 Implement:
-- [ ] Repeated Local Search
+- [x] Repeated Local Search
 - [ ] Iterated Local Search
 - [ ] Guided Local Search
 
