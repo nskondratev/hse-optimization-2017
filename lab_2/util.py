@@ -56,6 +56,11 @@ def read_from_file(filepath):
         return res, m, p, np.sum(res)
 
 
+'''
+Problem related util functions
+'''
+
+
 def objective_function(matrix, n1, clusters_row, clusters_col):
     n_zeros_in = 0
     n_ones_in = 0
@@ -80,3 +85,64 @@ def generate_initial_solution(m, p):
     for i in range(b, p):
         clusters_column[i] = 2
     return clusters_row, clusters_column
+
+
+def swap(a, i, j):
+    a[i], a[j] = a[j], a[i]
+
+
+# this function changes matrix, does not change clusters -> matrix, perm_row are renewed
+def swap_rows(matrix, i, j, perm_row):
+    matrix[i], matrix[j] = matrix[j], matrix[i].copy()
+    swap(perm_row, i, j)
+    return matrix
+
+
+# this function changes matrix, does not change clusters -> matrix, perm_col are renewed
+def swap_cols(matrix, i, j, perm_col):
+    matrix[:, i], matrix[:, j] = matrix[:, j], matrix[:, i].copy()
+    swap(perm_col, i, j)
+    return matrix
+
+
+# this function changes clusters, does not change matrix -> clusters_row, clusters_col are renewed
+def split_clusters(clusters_row, clusters_col, current_number_of_clusters, number_of_cluster):
+    if (current_number_of_clusters >= min(len(clusters_row), len(clusters_col))):
+        return -1  # cannot split if all clusters are 1*1
+    new_row = clusters_row.copy()
+    new_col = clusters_col.copy()
+    part_row = []
+    part_col = []
+    # find cluster to split, at least 2*2
+    M = number_of_cluster  # number of cluster to split
+    for i in range(len(new_row)):
+        if (new_row[i] == M): part_row.append(i)
+    for i in range(len(new_col)):
+        if (new_col[i] == M): part_col.append(i)
+    if ((len(part_row) < 2) | (len(part_col) < 2)):
+        return -1  # cannot split this cluster
+    # choose row and column to split
+    a = part_row[0] + random.randint(1, len(part_row) - 1)
+    b = part_col[0] + random.randint(1, len(part_col) - 1)
+    for i in range(a, len(new_row)):
+        new_row[i] += 1
+    for i in range(b, len(new_col)):
+        new_col[i] += 1
+    return new_row, new_col
+
+
+# this function changes clusters, does not change matrix -> clusters_row, clusters_col are renewed
+def union_two_clusters(clusters_row, clusters_col, current_number_of_clusters, number_of_cluster):
+    if (current_number_of_clusters == 1):
+        return -1  # cannot union if there is only one cluster
+    new_row = clusters_row.copy()
+    new_col = clusters_col.copy()
+    # find clusters to union
+    M = number_of_cluster  # union M and M + 1 clusters
+    part_row = []
+    part_col = []
+    for i in range(len(new_row)):
+        if (new_row[i] >= M + 1): new_row[i] -= 1
+    for i in range(len(new_col)):
+        if (new_col[i] >= M + 1): new_col[i] -= 1
+    return new_row, new_col
