@@ -65,7 +65,7 @@ def read_from_file(filepath):
 Problem related util functions
 '''
 
-
+# TODO Deprecated. Remove
 def calc_obj_val(matrix, n1, clusters_row, clusters_col):
     n_zeros_in = 0
     n_ones_in = 0
