@@ -3,7 +3,7 @@ import random
 
 
 # this function changes matrix, does not change clusters -> matrix, perm_row are renewed
-def shaking_row(matrix, m, p, perm_row):
+def by_rows(matrix, m, p, perm_row):
     a1 = random.randint(0, m - 1)
     a2 = a1
     while (a2 == a1): a2 = random.randint(0, m - 1)
@@ -11,7 +11,7 @@ def shaking_row(matrix, m, p, perm_row):
 
 
 # this function changes matrix, does not change clusters -> matrix, perm_col are renewed
-def shaking_col(matrix, m, p, perm_col):
+def by_columns(matrix, m, p, perm_col):
     b1 = random.randint(0, p - 1)
     b2 = b1
     while (b2 == b1): b2 = random.randint(0, p - 1)
@@ -19,7 +19,7 @@ def shaking_col(matrix, m, p, perm_col):
 
 
 # this function changes clusters, does not change matrix -> clusters_row, clusters_col are renewed
-def shaking_split(clusters_row, clusters_col, current_number_of_clusters):
+def by_clusters_splitting(clusters_row, clusters_col, current_number_of_clusters):
     res = -1
     if (current_number_of_clusters == min(len(clusters_row), len(clusters_col))):
         return -1  # no shaking is possible
@@ -30,7 +30,7 @@ def shaking_split(clusters_row, clusters_col, current_number_of_clusters):
 
 
 # this function changes clusters, does not change matrix -> clusters_row, clusters_col are renewed
-def shaking_union(clusters_row, clusters_col, current_number_of_clusters):
+def by_clusters_union(clusters_row, clusters_col, current_number_of_clusters):
     res = -1
     if (current_number_of_clusters == 1):
         return -1  # no shaking is possible

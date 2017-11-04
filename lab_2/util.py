@@ -6,9 +6,9 @@ import datetime as dt
 
 
 # Ensure if dir does exist
-def ensure_dir(dirpath):
-    if not os.path.exists(dirpath):
-        os.mkdir(dirpath)
+def ensure_dir(path_to_dir):
+    if not os.path.exists(path_to_dir):
+        os.mkdir(path_to_dir)
 
 
 '''
@@ -41,6 +41,11 @@ End logger config
 
 
 # Read input data from file
+# returns:
+# - res - matrix
+# - m - number of machines
+# - p - number of parts
+# - n1 - sum of ones in matrix
 def read_from_file(filepath):
     with open(filepath, 'r') as f:
         first_line = f.readline().strip().split(' ')
@@ -61,7 +66,7 @@ Problem related util functions
 '''
 
 
-def objective_function(matrix, n1, clusters_row, clusters_col):
+def calc_obj_val(matrix, n1, clusters_row, clusters_col):
     n_zeros_in = 0
     n_ones_in = 0
     for i in range(len(clusters_row)):
@@ -74,16 +79,12 @@ def objective_function(matrix, n1, clusters_row, clusters_col):
 
     return n_ones_in / (n1 + n_zeros_in)
 
-
-def generate_initial_solution(m, p):
-    a = random.randint(1, m - 1)
-    b = random.randint(1, p - 1)
+# TODO Deprecated. Remove
+def generate_random_solution(m, p):
+    a, b = random.randint(1, m - 1), random.randint(1, p - 1)
     clusters_row = np.ones(m)
     clusters_column = np.ones(p)
-    for i in range(a, m):
-        clusters_row[i] = 2
-    for i in range(b, p):
-        clusters_column[i] = 2
+    clusters_row[a:m] = clusters_column[b:p] = 2
     return clusters_row, clusters_column
 
 
