@@ -5,7 +5,7 @@ import logging
 import datetime as dt
 
 
-# Ensure if dir does exist
+# Ensure if dir exists
 def ensure_dir(path_to_dir):
     if not os.path.exists(path_to_dir):
         os.mkdir(path_to_dir)
@@ -46,11 +46,15 @@ End logger config
 # - m - number of machines
 # - p - number of parts
 # - n1 - sum of ones in matrix
-def read_from_file(filepath):
-    with open(filepath, 'r') as f:
+def read_from_file(path_to_file: str) -> np.ndarray:
+    """
+    Parse file and return matrix
+    :param path_to_file: str -- Path to input file
+    :return: np.ndarray
+    """
+    with open(path_to_file, 'r') as f:
         first_line = f.readline().strip().split(' ')
-        m = int(first_line[0])
-        p = int(first_line[1])
+        m, p = int(first_line[0]), int(first_line[1])
         res = np.zeros((m, p))
         for i in range(m):
             line = f.readline().strip().split(' ')
@@ -58,12 +62,13 @@ def read_from_file(filepath):
             for j in range(1, len(line)):
                 col = int(line[j]) - 1
                 res[row, col] = 1
-        return res, m, p, np.sum(res)
+        return res
 
 
 '''
 Problem related util functions
 '''
+
 
 # TODO Deprecated. Remove
 def calc_obj_val(matrix, n1, clusters_row, clusters_col):
@@ -78,6 +83,7 @@ def calc_obj_val(matrix, n1, clusters_row, clusters_col):
                     n_zeros_in += 1
 
     return n_ones_in / (n1 + n_zeros_in)
+
 
 # TODO Deprecated. Remove
 def generate_random_solution(m, p):
@@ -96,43 +102,65 @@ def swap(a, i, j):
 def swap_rows(matrix, i, j, perm_row):
     matrix[i], matrix[j] = matrix[j], matrix[i].copy()
     swap(perm_row, i, j)
-    return matrix
 
 
 # this function changes matrix, does not change clusters -> matrix, perm_col are renewed
 def swap_cols(matrix, i, j, perm_col):
     matrix[:, i], matrix[:, j] = matrix[:, j], matrix[:, i].copy()
     swap(perm_col, i, j)
-    return matrix
+
+
+def increment_from_index(arr: np.array, i: int):
+    """
+    Increment values in array starting from provided index
+    :param arr: np.array -- Array to change
+    :param i: int -- Index to start with
+    :return: void
+    """
+    arr[i:] = arr[i:] + 1
+
+
+def split_clusters(clusters_row: np.array, clusters_col: np.array, clusters_count: int, cluster_to_split: int) -> bool:
+    """
+    Split requested cluster
+    :param clusters_row: np.array -- Clusters by row
+    :param clusters_col: np.array -- Clusters by columns
+    :param clusters_count: int -- Clusters count
+    :param cluster_to_split: int -- Cluster to split number
+    :return: bool
+    """
+    # Check if we can split provided cluster
+    cluster_to_split_row_indexes = np.where(clusters_row == cluster_to_split)[0]
+    cluster_to_split_col_indexes = np.where(clusters_col == cluster_to_split)[0]
+    if len(cluster_to_split_row_indexes) == 1 or len(cluster_to_split_col_indexes) == 1:
+        return False
+    # Pick random point for splitting
+    split_row_index = np.random.choice(cluster_to_split_row_indexes[1:])
+    split_col_index = np.random.choice(cluster_to_split_col_indexes[1:])
+    # Split by row
+    increment_from_index(clusters_row, split_row_index)
+    increment_from_index(clusters_col, split_col_index)
+    return True
+
+
+def union_clusters(clusters_row: np.array, clusters_col: np.array, clusters_count: int, cluster_to_union: int) -> bool:
+    """
+    Union provided cluster with the next one
+    :param clusters_row: np.array -- Clusters row
+    :param clusters_col: np.array -- Clusters col
+    :param clusters_count: int -- Clusters count
+    :param cluster_to_union: int -- Cluster number to union
+    :return: bool
+    """
+    if clusters_count == 1:
+        return False
+    clusters_row[clusters_row > cluster_to_union] = clusters_row[clusters_row > cluster_to_union] - 1
+    clusters_col[clusters_col > cluster_to_union] = clusters_col[clusters_col > cluster_to_union] - 1
+    return True
 
 
 # this function changes clusters, does not change matrix -> clusters_row, clusters_col are renewed
-def split_clusters(clusters_row, clusters_col, current_number_of_clusters, number_of_cluster):
-    if (current_number_of_clusters >= min(len(clusters_row), len(clusters_col))):
-        return -1  # cannot split if all clusters are 1*1
-    new_row = clusters_row.copy()
-    new_col = clusters_col.copy()
-    part_row = []
-    part_col = []
-    # find cluster to split, at least 2*2
-    M = number_of_cluster  # number of cluster to split
-    for i in range(len(new_row)):
-        if (new_row[i] == M): part_row.append(i)
-    for i in range(len(new_col)):
-        if (new_col[i] == M): part_col.append(i)
-    if ((len(part_row) < 2) | (len(part_col) < 2)):
-        return -1  # cannot split this cluster
-    # choose row and column to split
-    a = part_row[0] + random.randint(1, len(part_row) - 1)
-    b = part_col[0] + random.randint(1, len(part_col) - 1)
-    for i in range(a, len(new_row)):
-        new_row[i] += 1
-    for i in range(b, len(new_col)):
-        new_col[i] += 1
-    return new_row, new_col
-
-
-# this function changes clusters, does not change matrix -> clusters_row, clusters_col are renewed
+# TODO Deprecated. Remove
 def union_two_clusters(clusters_row, clusters_col, current_number_of_clusters, number_of_cluster):
     if (current_number_of_clusters == 1):
         return -1  # cannot union if there is only one cluster
