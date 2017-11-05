@@ -47,7 +47,7 @@ def by_clusters_union(matrix, n1, m, p, clusters_row, clusters_col, current_numb
     new_col = clusters_col.copy()
     N = current_number_of_clusters
     for i in range(1, N):
-        res = util.split_clusters(clusters_row, clusters_col, N, i)
+        res = util.union_two_clusters(clusters_row, clusters_col, N, i)
         if (res != -1):
             new_row, new_col = res
             new_obj = util.calc_obj_val(matrix, n1, new_row, new_col)
