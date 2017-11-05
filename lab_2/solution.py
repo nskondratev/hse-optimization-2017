@@ -20,11 +20,11 @@ def generate_random_clusters(size: int, clusters_count: int) -> np.array:
 
 
 class Solution:
-    def __init__(self, matrix: np.matrix, clusters_row: np.array, clusters_col: np.array, perm_row: np.array = None,
+    def __init__(self, matrix: np.ndarray, clusters_row: np.array, clusters_col: np.array, perm_row: np.array = None,
                  perm_col: np.array = None):
         """
         Create new Solution instance
-        :param matrix: np.matrix -- Input matrix
+        :param matrix: np.array -- Input matrix
         :param clusters_row: np.array -- Clusters by rows
         :param clusters_col: np.array -- Clusters by columns
         :param perm_row: np.array -- Matrix permutations by rows
@@ -78,10 +78,10 @@ class Solution:
         self.__obj_val = new_obj_val
 
     @staticmethod
-    def get_random(matrix: np.matrix, clusters_count: int = 2):
+    def get_random_solution(matrix: np.ndarray, clusters_count: int = 2):
         """
         Generate random solution
-        :param matrix: np.matrix -- Input matrix
+        :param matrix: np.array -- Input matrix
         :param clusters_count: int -- Desirable clusters count
         :return: Solution -- random solution
         """
@@ -127,4 +127,4 @@ class Solution:
 
 
 # Create new type for typing
-NewType('Solution', Solution)
+# NewType('Solution', Solution)
