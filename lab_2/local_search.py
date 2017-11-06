@@ -1,5 +1,6 @@
 import lab_2.util as util
 
+# TODO Deprecated. Remove
 
 # this function changes matrix, does not change clusters -> matrix, perm_row are renewed
 # clusters are constant and used only to find objective function
