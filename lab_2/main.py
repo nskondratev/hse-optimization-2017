@@ -2,7 +2,7 @@ from multiprocessing import Pool
 import os
 
 from lab_2.util import read_from_file, write_result_to_file, ensure_dir, logger
-from lab_2.vns import GVNS
+from lab_2.gvns import GVNS
 from lab_2.solution import Solution
 from lab_2.local_search import *
 from lab_2.shaking import *
