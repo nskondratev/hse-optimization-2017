@@ -2,11 +2,12 @@ from .abstract_local_search import AbstractLocalSearch
 from lab_2.util import split_clusters
 from lab_2.solution import Solution
 import numpy as np
+from typing import Optional
 
 
 class LocalSearchByClustersSplitting(AbstractLocalSearch):
     @staticmethod
-    def improve_solution(solution_to_improve: Solution) -> Solution:
+    def improve_solution(solution_to_improve: Solution) -> Optional[Solution]:
         initial_solution = solution_to_improve.copy()
         clusters_count = len(np.unique(initial_solution.clusters_row))
         clusters_to_split = np.arange(1, clusters_count + 1)
