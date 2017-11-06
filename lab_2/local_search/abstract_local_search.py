@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod, abstractstaticmethod
+from abc import ABC, abstractstaticmethod
 from lab_2.solution import Solution
 from typing import Optional
 
