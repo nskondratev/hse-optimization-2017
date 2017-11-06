@@ -1,15 +1,14 @@
-from abc import ABC, abstractmethod
+from abc import ABC, abstractmethod, abstractstaticmethod
 from lab_2.solution import Solution
+from typing import Optional
 
 
 class AbstractLocalSearch(ABC):
-    def __init__(self, solution: Solution):
-        self.initial_solution = solution.copy()
-
-    @abstractmethod
-    def get_improved_solution(self) -> Solution:
+    @abstractstaticmethod
+    def improve_solution(solution_to_improve: Solution) -> Optional[Solution]:
         """
         Get solution improved by local search
+        :solution_to_improve:Solution -- Solution to improve
         :return:Solution
         """
         pass
