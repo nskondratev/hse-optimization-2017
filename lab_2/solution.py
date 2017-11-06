@@ -1,6 +1,5 @@
 from lab_2.util import logger
 import numpy as np
-from typing import NewType
 
 
 def generate_random_clusters(size: int, clusters_count: int) -> np.array:
@@ -18,6 +17,12 @@ def generate_random_clusters(size: int, clusters_count: int) -> np.array:
     clusters[clusters == 0] = np.random.randint(1, clusters_count + 1, size=size - clusters_count)
     return np.sort(clusters)
 
+def decode_clusters(range_ub: int, perm: np.array, clusters: np.array) -> list:
+    res = []
+    for i in range(range_ub):
+        real_index = np.where(perm == i)[0][0]
+        res.append(str(clusters[real_index]))
+    return res
 
 class Solution:
     def __init__(self, matrix: np.ndarray, clusters_row: np.array, clusters_col: np.array, perm_row: np.array = None,
@@ -125,6 +130,7 @@ class Solution:
             raise TypeError('other_solution has to be the instance of Solution class')
         return self.obj_val > other_solution.obj_val
 
-
-# Create new type for typing
-# NewType('Solution', Solution)
+    def format(self) -> str:
+        res_m = decode_clusters(self.m, self.perm_row, self.clusters_row)
+        res_p = decode_clusters(self.p, self.perm_col, self.clusters_col)
+        return ' '.join(res_m)+'\n'+' '.join(res_p)
