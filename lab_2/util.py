@@ -1,8 +1,8 @@
 import os
 import numpy as np
-import random
 import logging
 import datetime as dt
+from lab_2.solution import Solution
 
 
 # Ensure if dir exists
@@ -70,30 +70,6 @@ Problem related util functions
 '''
 
 
-# TODO Deprecated. Remove
-def calc_obj_val(matrix, n1, clusters_row, clusters_col):
-    n_zeros_in = 0
-    n_ones_in = 0
-    for i in range(len(clusters_row)):
-        for j in range(len(clusters_col)):
-            if clusters_row[i] == clusters_col[j]:
-                if matrix[i, j] == 1:
-                    n_ones_in += 1
-                else:
-                    n_zeros_in += 1
-
-    return n_ones_in / (n1 + n_zeros_in)
-
-
-# TODO Deprecated. Remove
-def generate_random_solution(m, p):
-    a, b = random.randint(1, m - 1), random.randint(1, p - 1)
-    clusters_row = np.ones(m)
-    clusters_column = np.ones(p)
-    clusters_row[a:m] = clusters_column[b:p] = 2
-    return clusters_row, clusters_column
-
-
 def swap(a, i, j):
     a[i], a[j] = a[j], a[i]
 
@@ -159,19 +135,6 @@ def union_clusters(clusters_row: np.array, clusters_col: np.array, clusters_coun
     return True
 
 
-# this function changes clusters, does not change matrix -> clusters_row, clusters_col are renewed
-# TODO Deprecated. Remove
-def union_two_clusters(clusters_row, clusters_col, current_number_of_clusters, number_of_cluster):
-    if (current_number_of_clusters == 1):
-        return -1  # cannot union if there is only one cluster
-    new_row = clusters_row.copy()
-    new_col = clusters_col.copy()
-    # find clusters to union
-    M = number_of_cluster  # union M and M + 1 clusters
-    part_row = []
-    part_col = []
-    for i in range(len(new_row)):
-        if (new_row[i] >= M + 1): new_row[i] -= 1
-    for i in range(len(new_col)):
-        if (new_col[i] >= M + 1): new_col[i] -= 1
-    return new_row, new_col
+def write_result_to_file(path_to_file: str, solution: Solution):
+    with open(path_to_file, 'w') as f:
+        f.write(solution.format())

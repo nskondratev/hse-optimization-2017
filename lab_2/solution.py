@@ -1,4 +1,3 @@
-from lab_2.util import logger
 import numpy as np
 
 
