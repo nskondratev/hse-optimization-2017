@@ -1,5 +1,5 @@
 from abc import ABC, abstractstaticmethod
-from lab_2.solution import Solution
+from ..solution import Solution
 from typing import Optional
 
 

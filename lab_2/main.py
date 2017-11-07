@@ -1,11 +1,11 @@
 from multiprocessing import Pool
 import os
 
-from lab_2.util import read_from_file, write_result_to_file, ensure_dir, logger
-from lab_2.gvns import GVNS
-from lab_2.solution import Solution
-from lab_2.local_search import *
-from lab_2.shaking import *
+from .util import read_from_file, write_result_to_file, ensure_dir, logger
+from .gvns import GVNS
+from .solution import Solution
+from .local_search import *
+from .shaking import *
 
 TEST_INSTANCES_DIR = 'test_instances'
 SOLUTIONS_DIR = 'solutions'

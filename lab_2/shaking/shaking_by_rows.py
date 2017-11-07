@@ -1,6 +1,6 @@
 from .abstract_shaking import AbstractShaking
-from lab_2.solution import Solution
-from lab_2.util import swap_rows
+from ..solution import Solution
+from ..util import swap_rows
 from random import randint
 
 

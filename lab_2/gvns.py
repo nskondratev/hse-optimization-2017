@@ -1,10 +1,10 @@
-from lab_2.solution import Solution
+from .solution import Solution
 
 class GVNS:
     @staticmethod
     def solve(initial_solution: Solution, shaking_neighborhood: list, ls_neighborhood: list, MAX_ITERATIONS=1000) -> Solution:
         x = initial_solution
-        for i in range(MAX_ITERATIONS):
+        for _ in range(MAX_ITERATIONS):
             k = 0
             while k < len(shaking_neighborhood):
                 cur_sh_neighborhood = shaking_neighborhood[k]

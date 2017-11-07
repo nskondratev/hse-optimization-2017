@@ -1,6 +1,6 @@
 from .abstract_local_search import AbstractLocalSearch
-from lab_2.util import swap_rows
-from lab_2.solution import Solution
+from ..util import swap_rows
+from ..solution import Solution
 import numpy as np
 from typing import Optional
 

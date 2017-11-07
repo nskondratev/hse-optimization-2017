@@ -1,6 +1,6 @@
 from .abstract_shaking import AbstractShaking
-from lab_2.solution import Solution
-from lab_2.util import split_clusters
+from ..solution import Solution
+from ..util import split_clusters
 from typing import Optional
 import numpy as np
 

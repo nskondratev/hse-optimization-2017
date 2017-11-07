@@ -2,7 +2,7 @@ import os
 import numpy as np
 import logging
 import datetime as dt
-from lab_2.solution import Solution
+from .solution import Solution
 
 
 # Ensure if dir exists
