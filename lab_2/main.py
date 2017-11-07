@@ -3,6 +3,7 @@ import os
 
 from .util import read_from_file, write_result_to_file, ensure_dir, logger
 from .gvns import GVNS
+from .rvns import RVNS
 from .solution import Solution
 from .local_search import *
 from .shaking import *
@@ -31,8 +32,13 @@ def apply_gvns(path_to_file):
     matrix = read_from_file(path_to_file)
     initial_solution = Solution.get_random_solution(matrix, clusters_count=2)
     logger.debug('[{}] Build random solution:\n{}'.format(path_to_file, initial_solution))
+    # Improve initial solution by RVNS
+    initial_solution = RVNS.solve(initial_solution, shaking_neighborhood, MAX_ITERATIONS=100)
+    logger.debug('[{}] Improved solution by RVNS:\n{}'.format(path_to_file, initial_solution))
+    # Improve solution with GVNS
     final_solution = GVNS.solve(initial_solution, shaking_neighborhood, ls_neighborhood)
     logger.debug('[{}] Get final solution:\n{}'.format(path_to_file, initial_solution))
+    # Write final solution in file
     path_to_res_file = os.path.join(SOLUTIONS_DIR, os.path.basename(path_to_file).replace('.txt', '') + '.sol')
     write_result_to_file(path_to_res_file, final_solution)
     logger.info('[{}] Finished processing file.'.format(path_to_file))
@@ -42,6 +48,6 @@ if __name__ == '__main__':
     ensure_dir(SOLUTIONS_DIR)
     test_instances = [os.path.join(TEST_INSTANCES_DIR, x) for x in os.listdir(TEST_INSTANCES_DIR)]
     pool = Pool()
-    pool.map(apply_gvns, test_instances)
+    pool.map(apply_gvns, test_instances[0:1])
     pool.close()
     pool.join()
