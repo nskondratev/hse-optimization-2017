@@ -1,12 +1,12 @@
 from multiprocessing import Pool
 import os
 
-from .util import read_from_file, write_result_to_file, ensure_dir, logger
-from .gvns import GVNS
-from .rvns import RVNS
-from .solution import Solution
-from .local_search import *
-from .shaking import *
+from lab_2.util import read_from_file, write_result_to_file, ensure_dir, logger
+from lab_2.gvns import GVNS
+from lab_2.rvns import RVNS
+from lab_2.solution import Solution
+from lab_2.local_search import *
+from lab_2.shaking import *
 
 TEST_INSTANCES_DIR = 'test_instances'
 SOLUTIONS_DIR = 'solutions'
@@ -48,6 +48,6 @@ if __name__ == '__main__':
     ensure_dir(SOLUTIONS_DIR)
     test_instances = [os.path.join(TEST_INSTANCES_DIR, x) for x in os.listdir(TEST_INSTANCES_DIR)]
     pool = Pool()
-    pool.map(apply_gvns, test_instances[0:1])
+    pool.map(apply_gvns, test_instances)
     pool.close()
     pool.join()
