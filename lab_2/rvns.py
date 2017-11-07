@@ -1,8 +1,16 @@
 from .solution import Solution
 
+
 class RVNS:
     @staticmethod
-    def solve(initial_solution: Solution, shaking_neighborhood: list, MAX_ITERATIONS:int=100) -> Solution:
+    def solve(initial_solution: Solution, shaking_neighborhood: list, MAX_ITERATIONS: int = 100) -> Solution:
+        """
+        Improve solution by RVNS
+        :param initial_solution: Solution -- Initial solution
+        :param shaking_neighborhood: list -- List of shaking neighborhood
+        :param MAX_ITERATIONS: int -- Iterations number of RVNS
+        :return: Solution -- Improved solution
+        """
         x = initial_solution
         for _ in range(MAX_ITERATIONS):
             k = 0
