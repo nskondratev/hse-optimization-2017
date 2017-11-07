@@ -37,7 +37,7 @@ def apply_gvns(path_to_file):
     logger.debug('[{}] Improved solution by RVNS:\n{}'.format(path_to_file, initial_solution))
     # Improve solution with GVNS
     final_solution = GVNS.solve(initial_solution, shaking_neighborhood, ls_neighborhood)
-    logger.debug('[{}] Get final solution:\n{}'.format(path_to_file, initial_solution))
+    logger.debug('[{}] Get final solution:\n{}'.format(path_to_file, final_solution))
     # Write final solution in file
     path_to_res_file = os.path.join(SOLUTIONS_DIR, os.path.basename(path_to_file).replace('.txt', '') + '.sol')
     write_result_to_file(path_to_res_file, final_solution)
