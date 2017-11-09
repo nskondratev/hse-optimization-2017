@@ -11,8 +11,8 @@ from lab_2.shaking import *
 TEST_INSTANCES_DIR = 'test_instances'
 SOLUTIONS_DIR = 'solutions'
 
-RVNS_ITERATIONS_NUMBER = 500
-GVNS_ITERATIONS_NUMBER = 2000
+RVNS_ITERATIONS = os.environ.get('RVNS_ITERATIONS') or 500
+GVNS_ITERATIONS = os.environ.get('GVNS_ITERATIONS') or 2000
 
 
 def apply_gvns(path_to_file):
@@ -36,10 +36,10 @@ def apply_gvns(path_to_file):
     initial_solution = Solution.get_random_solution(matrix, clusters_count=2)
     logger.debug('[{}] Build random solution:\n{}'.format(path_to_file, initial_solution))
     # Improve initial solution by RVNS
-    initial_solution = RVNS.solve(initial_solution, shaking_neighborhood, MAX_ITERATIONS=RVNS_ITERATIONS_NUMBER)
+    initial_solution = RVNS.solve(initial_solution, shaking_neighborhood, MAX_ITERATIONS=RVNS_ITERATIONS)
     logger.debug('[{}] Improved solution by RVNS:\n{}'.format(path_to_file, initial_solution))
     # Improve solution with GVNS
-    final_solution = GVNS.solve(initial_solution, shaking_neighborhood, ls_neighborhood, MAX_ITERATIONS=GVNS_ITERATIONS_NUMBER)
+    final_solution = GVNS.solve(initial_solution, shaking_neighborhood, ls_neighborhood, MAX_ITERATIONS=GVNS_ITERATIONS)
     logger.debug('[{}] Get final solution:\n{}'.format(path_to_file, final_solution))
     # Write final solution in file
     path_to_res_file = os.path.join(SOLUTIONS_DIR, os.path.basename(path_to_file).replace('.txt', '') + '.sol')
