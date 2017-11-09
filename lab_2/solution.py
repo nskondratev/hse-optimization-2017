@@ -105,10 +105,10 @@ class Solution:
         return Solution(matrix, clusters_row, clusters_col)
 
     @staticmethod
-    def calc_obj_val(matrix: np.matrix, clusters_row: np.array, clusters_col: np.array) -> float:
+    def calc_obj_val(matrix: np.ndarray, clusters_row: np.array, clusters_col: np.array) -> float:
         """
         Calculate the objective function value
-        :param matrix: np.matrix -- Matrix
+        :param matrix: np.ndarray -- Matrix
         :param clusters_row: np.array -- Clusters by rows
         :param clusters_col: np.array -- Clusters by columns
         :return: float -- The objective function value
@@ -124,11 +124,6 @@ class Solution:
                     else:
                         n_zeros_in += 1
         return n_ones_in / (n1 + n_zeros_in)
-
-    def hash(self):
-        h = sha256()
-        h.update('{}_{}_{}_{}'.format(self.clusters_row, self.clusters_col, self.perm_row, self.perm_col).encode())
-        return h.hexdigest()
 
     def __str__(self):
         return '<Solution>\nMatrix:\n{},\nclusters by rows: {}, by columns: {},\npermutations by rows: {}, by columns: {},\nobj_val={}'.format(
