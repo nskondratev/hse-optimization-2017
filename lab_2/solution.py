@@ -1,4 +1,5 @@
 import numpy as np
+from hashlib import sha256
 
 
 def generate_random_clusters(size: int, clusters_count: int) -> np.array:
@@ -123,6 +124,11 @@ class Solution:
                     else:
                         n_zeros_in += 1
         return n_ones_in / (n1 + n_zeros_in)
+
+    def hash(self):
+        h = sha256()
+        h.update('{}_{}_{}_{}'.format(self.clusters_row, self.clusters_col, self.perm_row, self.perm_col).encode())
+        return h.hexdigest()
 
     def __str__(self):
         return '<Solution>\nMatrix:\n{},\nclusters by rows: {}, by columns: {},\npermutations by rows: {}, by columns: {},\nobj_val={}'.format(
