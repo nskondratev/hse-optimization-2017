@@ -65,6 +65,17 @@ def read_from_file(path_to_file: str) -> np.ndarray:
         return res
 
 
+def read_clusters_from_solution_file(path_to_file: str) -> (np.array, np.array):
+    """
+    Read clusters from solution file
+    :param path_to_file: str -- Path to file with solution
+    :return: (np.array, np.array) -- Clusters row and clusters col
+    """
+    with open(path_to_file, 'r') as f:
+        clusters_row = np.array([int(x) for x in f.readline().strip().split(' ')])
+        clusters_col = np.array([int(x) for x in f.readline().strip().split(' ')])
+        return clusters_row, clusters_col
+
 '''
 Problem related util functions
 '''
