@@ -65,5 +65,5 @@ means machine 1 processes parts 9 17 19 31 33
 
 Example:
 ```bash
-$ LOG_LEVEL=DEBUG python3 main.py
+$ LOG_LEVEL=DEBUG RVNS_ITERATIONS=100 GVNS_ITERATIONS=1000 python3 main.py
 ```
