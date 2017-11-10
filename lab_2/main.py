@@ -1,5 +1,6 @@
 from multiprocessing import Pool
 import os
+import numpy as np
 
 from lab_2.util import read_from_file, write_result_to_file, ensure_dir, logger
 from lab_2.gvns import GVNS
@@ -12,7 +13,8 @@ TEST_INSTANCES_DIR = 'test_instances'
 SOLUTIONS_DIR = 'solutions'
 
 RVNS_ITERATIONS = os.environ.get('RVNS_ITERATIONS') or 500
-GVNS_ITERATIONS = os.environ.get('GVNS_ITERATIONS') or 2000
+GVNS_ITERATIONS = os.environ.get('GVNS_ITERATIONS') or 1000
+IS_ITERATIONS = os.environ.get('IS_ITERATIONS') or 200
 
 
 def apply_gvns(path_to_file):
@@ -34,6 +36,12 @@ def apply_gvns(path_to_file):
     # Initial solution
     matrix = read_from_file(path_to_file)
     initial_solution = Solution.get_random_solution(matrix, clusters_count=2)
+    max_clusters_count = min(initial_solution.m, initial_solution.p)
+    for _ in range(IS_ITERATIONS):
+        clusters_count = np.random.randint(2, max_clusters_count)
+        tmp_solution = Solution.get_random_solution(matrix, clusters_count)
+        if tmp_solution.is_better(initial_solution):
+            initial_solution = tmp_solution.copy()
     logger.debug('[{}] Build random solution:\n{}'.format(path_to_file, initial_solution))
     # Improve initial solution by RVNS
     initial_solution = RVNS.solve(initial_solution, shaking_neighborhood, MAX_ITERATIONS=RVNS_ITERATIONS)
