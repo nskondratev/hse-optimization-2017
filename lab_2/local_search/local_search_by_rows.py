@@ -15,6 +15,9 @@ class LocalSearchByRows(AbstractLocalSearch):
             range_j = np.arange(i + 1, initial_solution.m)
             np.random.shuffle(range_j)
             for j in range_j:
+                # Skip rows if they are in the same cluster
+                if initial_solution.clusters_row[i] == initial_solution.clusters_row[j]:
+                    continue
                 tmp_solution = initial_solution.copy()
                 swap_rows(tmp_solution.matrix, i, j, tmp_solution.perm_row)
                 if tmp_solution.is_better(initial_solution):
