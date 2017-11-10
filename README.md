@@ -63,7 +63,17 @@ means machine 1 processes parts 9 17 19 31 33
 * Go to *lab_2* directory
 * Run *main.py* with the desirable log level (default log level: INFO)
 
+Available parameters:
+* **--rvns_iterations** - number of RVNS iterations
+* **--gvns_iterations** - number of GVNS iterations
+* **--is_iterations** - number of iterations for generating initial solution
+* **--mode** - run mode:
+  * *all* - runs GVNS on all files in TEST_INSTANCES dir in multi-threads
+  * *single* - runs GVNS on single file for provided number of iterations in single thread
+* **--filename** - path to test instance for *single* mode
+* **--sf_iterations** - number of iterations for instance in *single* mode
+
 Example:
 ```bash
-$ LOG_LEVEL=DEBUG RVNS_ITERATIONS=100 GVNS_ITERATIONS=1000 python3 main.py
+$ LOG_LEVEL=DEBUG python3 main.py --mode all
 ```
